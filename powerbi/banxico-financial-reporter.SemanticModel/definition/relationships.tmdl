@@ -1,0 +1,5 @@
+relationship bb70c597-bcd4-4eb3-88b7-2866a435945b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Histórico.fecha
+	toColumn: LocalDateTable_ac988185-f5f2-4eb3-9e92-27d0dfb23503.Date
+

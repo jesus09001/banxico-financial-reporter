@@ -1,0 +1,50 @@
+/*
+  Medidas para Power BI Desktop.
+  Tabla esperada: 'Histórico'
+  Columnas esperadas: fecha, tipo_cambio, variacion_diaria_pct, volatilidad_30d
+*/
+
+TC_Actual =
+VAR UltimaFecha =
+    MAXX(
+        ALLSELECTED('Histórico'[fecha]),
+        'Histórico'[fecha]
+    )
+RETURN
+    CALCULATE(
+        MAX('Histórico'[tipo_cambio]),
+        'Histórico'[fecha] = UltimaFecha
+    )
+
+Var_Diaria_Actual =
+VAR UltimaFecha =
+    MAXX(
+        ALLSELECTED('Histórico'[fecha]),
+        'Histórico'[fecha]
+    )
+RETURN
+    CALCULATE(
+        MAX('Histórico'[variacion_diaria_pct]),
+        'Histórico'[fecha] = UltimaFecha
+    )
+
+TC_Minimo =
+MIN('Histórico'[tipo_cambio])
+
+TC_Maximo =
+MAX('Histórico'[tipo_cambio])
+
+TC_Promedio =
+AVERAGE('Histórico'[tipo_cambio])
+
+Volatilidad_Actual =
+VAR UltimaFecha =
+    MAXX(
+        ALLSELECTED('Histórico'[fecha]),
+        'Histórico'[fecha]
+    )
+RETURN
+    CALCULATE(
+        MAX('Histórico'[volatilidad_30d]),
+        'Histórico'[fecha] = UltimaFecha
+    )

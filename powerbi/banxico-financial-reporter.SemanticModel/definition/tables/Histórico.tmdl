@@ -1,0 +1,154 @@
+table Histórico
+	lineageTag: 86afa604-15cb-44d1-925d-ef62c2065db6
+
+	measure TC_Actual = ```
+		VAR UltimaFecha =
+		    MAXX(
+		        ALLSELECTED('Histórico'[fecha]),
+		        'Histórico'[fecha]
+		    )
+		RETURN
+		    CALCULATE(
+		        MAX('Histórico'[tipo_cambio]),
+		        'Histórico'[fecha] = UltimaFecha
+		    )
+		```
+		formatString: "$"#,##0.0000
+		lineageTag: 0a9d04b0-47f1-4ab9-91e5-1b6f45a10101
+
+	measure Var_Diaria_Actual = ```
+		VAR UltimaFecha =
+		    MAXX(
+		        ALLSELECTED('Histórico'[fecha]),
+		        'Histórico'[fecha]
+		    )
+		RETURN
+		    CALCULATE(
+		        MAX('Histórico'[variacion_diaria_pct]),
+		        'Histórico'[fecha] = UltimaFecha
+		    )
+		```
+		formatString: 0.00%;-0.00%;-
+		lineageTag: 21b3a7c2-7e5e-49a9-bf14-8c5b5ec2d4c2
+
+	measure TC_Minimo = ```
+		MIN('Histórico'[tipo_cambio])
+		```
+		formatString: "$"#,##0.0000
+		lineageTag: 7c3ce2ed-8ed7-4d1f-8508-a3e3ddcb4b8c
+
+	measure TC_Maximo = ```
+		MAX('Histórico'[tipo_cambio])
+		```
+		formatString: "$"#,##0.0000
+		lineageTag: 2bca3c87-9e91-45de-a68b-4fe1e6bcd63f
+
+	measure TC_Promedio = ```
+		AVERAGE('Histórico'[tipo_cambio])
+		```
+		formatString: "$"#,##0.0000
+		lineageTag: 5fda4f9a-3d41-46b7-b4af-7b4bca0fcd20
+
+	measure Volatilidad_Actual = ```
+		VAR UltimaFecha =
+		    MAXX(
+		        ALLSELECTED('Histórico'[fecha]),
+		        'Histórico'[fecha]
+		    )
+		RETURN
+		    CALCULATE(
+		        MAX('Histórico'[volatilidad_30d]),
+		        'Histórico'[fecha] = UltimaFecha
+		    )
+		```
+		formatString: 0.00%;-0.00%;-
+		lineageTag: 9a4e5d1f-5e83-4e8d-9b10-6ab738e9d9e8
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7cb9cd52-6090-4158-863e-fc4195f69d46
+		summarizeBy: none
+		sourceColumn: fecha
+
+		variation Variación
+			isDefault
+			relationship: bb70c597-bcd4-4eb3-88b7-2866a435945b
+			defaultHierarchy: LocalDateTable_ac988185-f5f2-4eb3-9e92-27d0dfb23503.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column tipo_cambio
+		dataType: double
+		lineageTag: ac6a3428-d6a7-4137-8f7c-6524693567fb
+		summarizeBy: sum
+		sourceColumn: tipo_cambio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column variacion_diaria_pct
+		dataType: double
+		lineageTag: 670a952e-66ad-47b9-a6ba-eff6812ea18a
+		summarizeBy: sum
+		sourceColumn: variacion_diaria_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column variacion_mensual_pct
+		dataType: double
+		lineageTag: 6bbe7b74-f3aa-4d59-bc75-d51c8f6c4ccc
+		summarizeBy: sum
+		sourceColumn: variacion_mensual_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ma_30d
+		dataType: double
+		lineageTag: 9a1be6d5-7b13-407d-8558-b3925f5d7dbe
+		summarizeBy: sum
+		sourceColumn: ma_30d
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ma_90d
+		dataType: double
+		lineageTag: 5989feee-b50f-4045-9f20-8bfb55c926f9
+		summarizeBy: sum
+		sourceColumn: ma_90d
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column volatilidad_30d
+		dataType: double
+		lineageTag: baa0009d-b89c-4de4-b0f5-8e9f018dd1b9
+		summarizeBy: sum
+		sourceColumn: volatilidad_30d
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Histórico = m
+		mode: import
+		source =
+				let
+				  Origen = Excel.Workbook(File.Contents("D:\PORTAFOLIO\Automatizacion\output\reporte_financiero.xlsx"), null, true),
+				  #"Navegación 1" = Origen{[Item = "Histórico", Kind = "Sheet"]}[Data],
+				  #"Encabezados promovidos" = Table.PromoteHeaders(#"Navegación 1", [PromoteAllScalars = true]),
+				  #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos", {{"fecha", type date}, {"tipo_cambio", type number}, {"variacion_diaria_pct", type number}, {"variacion_mensual_pct", type number}, {"ma_30d", type number}, {"ma_90d", type number}, {"volatilidad_30d", type number}}, "es")
+				in
+				  #"Tipo de columna cambiado"
+
+	annotation PBI_ResultType = Table

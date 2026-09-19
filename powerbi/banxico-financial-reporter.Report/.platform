@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "banxico-financial-reporter"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3963104f-465c-4def-8293-bdc5b546accd"
+  }
+}

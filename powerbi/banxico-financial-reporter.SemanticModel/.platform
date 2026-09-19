@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "banxico-financial-reporter"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "507266a1-f1e4-43b5-86f5-9418f41e9516"
+  }
+}
