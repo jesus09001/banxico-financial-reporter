@@ -1,6 +1,7 @@
 /*
   Medidas para Power BI Desktop.
-  Tabla esperada: 'Histórico'
+  Tabla de medidas: 'Metricas'
+  Tabla de datos: 'Histórico'
   Columnas esperadas: fecha, tipo_cambio, variacion_diaria_pct, volatilidad_30d
 */
 
@@ -48,3 +49,15 @@ RETURN
         MAX('Histórico'[volatilidad_30d]),
         'Histórico'[fecha] = UltimaFecha
     )
+-- Serie diaria para el gráfico principal.
+TC_Para_Grafico =
+VAR TipoCambioDia =
+    SELECTEDVALUE('Histórico'[tipo_cambio])
+RETURN
+    COALESCE(TipoCambioDia, MAX('Histórico'[tipo_cambio]))
+
+MA30_Para_Grafico =
+MAX('Histórico'[ma_30d])
+
+MA90_Para_Grafico =
+MAX('Histórico'[ma_90d])

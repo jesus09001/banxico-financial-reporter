@@ -1,69 +1,6 @@
 table Histórico
 	lineageTag: 86afa604-15cb-44d1-925d-ef62c2065db6
 
-	measure TC_Actual = ```
-		VAR UltimaFecha =
-		    MAXX(
-		        ALLSELECTED('Histórico'[fecha]),
-		        'Histórico'[fecha]
-		    )
-		RETURN
-		    CALCULATE(
-		        MAX('Histórico'[tipo_cambio]),
-		        'Histórico'[fecha] = UltimaFecha
-		    )
-		```
-		formatString: "$"#,##0.0000
-		lineageTag: 0a9d04b0-47f1-4ab9-91e5-1b6f45a10101
-
-	measure Var_Diaria_Actual = ```
-		VAR UltimaFecha =
-		    MAXX(
-		        ALLSELECTED('Histórico'[fecha]),
-		        'Histórico'[fecha]
-		    )
-		RETURN
-		    CALCULATE(
-		        MAX('Histórico'[variacion_diaria_pct]),
-		        'Histórico'[fecha] = UltimaFecha
-		    )
-		```
-		formatString: 0.00%;-0.00%;-
-		lineageTag: 21b3a7c2-7e5e-49a9-bf14-8c5b5ec2d4c2
-
-	measure TC_Minimo = ```
-		MIN('Histórico'[tipo_cambio])
-		```
-		formatString: "$"#,##0.0000
-		lineageTag: 7c3ce2ed-8ed7-4d1f-8508-a3e3ddcb4b8c
-
-	measure TC_Maximo = ```
-		MAX('Histórico'[tipo_cambio])
-		```
-		formatString: "$"#,##0.0000
-		lineageTag: 2bca3c87-9e91-45de-a68b-4fe1e6bcd63f
-
-	measure TC_Promedio = ```
-		AVERAGE('Histórico'[tipo_cambio])
-		```
-		formatString: "$"#,##0.0000
-		lineageTag: 5fda4f9a-3d41-46b7-b4af-7b4bca0fcd20
-
-	measure Volatilidad_Actual = ```
-		VAR UltimaFecha =
-		    MAXX(
-		        ALLSELECTED('Histórico'[fecha]),
-		        'Histórico'[fecha]
-		    )
-		RETURN
-		    CALCULATE(
-		        MAX('Histórico'[volatilidad_30d]),
-		        'Histórico'[fecha] = UltimaFecha
-		    )
-		```
-		formatString: 0.00%;-0.00%;-
-		lineageTag: 9a4e5d1f-5e83-4e8d-9b10-6ab738e9d9e8
-
 	column fecha
 		dataType: dateTime
 		formatString: Long Date
@@ -140,6 +77,24 @@ table Histórico
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	column año
+		dataType: int64
+		lineageTag: 2f89dd4b-6f0b-4f39-9df4-bcb6e65f5b3b
+		summarizeBy: none
+		sourceColumn: año
+
+	column fecha_grafico
+		dataType: string
+		lineageTag: d5f2c6a1-4c8e-4d3a-b7f9-1e6a2c8d4b70
+		summarizeBy: none
+		sourceColumn: fecha_grafico
+
+	column mes_grafico
+		dataType: string
+		lineageTag: e1b7c4d9-5f28-4a63-8c0e-2d9f6b1a7e35
+		summarizeBy: none
+		sourceColumn: mes_grafico
+
 	partition Histórico = m
 		mode: import
 		source =
@@ -147,8 +102,12 @@ table Histórico
 				  Origen = Excel.Workbook(File.Contents("D:\PORTAFOLIO\Automatizacion\output\reporte_financiero.xlsx"), null, true),
 				  #"Navegación 1" = Origen{[Item = "Histórico", Kind = "Sheet"]}[Data],
 				  #"Encabezados promovidos" = Table.PromoteHeaders(#"Navegación 1", [PromoteAllScalars = true]),
-				  #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos", {{"fecha", type date}, {"tipo_cambio", type number}, {"variacion_diaria_pct", type number}, {"variacion_mensual_pct", type number}, {"ma_30d", type number}, {"ma_90d", type number}, {"volatilidad_30d", type number}}, "es")
+				  #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos", {{"fecha", type date}, {"tipo_cambio", type number}, {"variacion_diaria_pct", type number}, {"variacion_mensual_pct", type number}, {"ma_30d", type number}, {"ma_90d", type number}, {"volatilidad_30d", type number}}, "es"),
+				  #"Fecha gráfico agregada" = Table.AddColumn(#"Tipo de columna cambiado", "fecha_grafico", each Date.ToText([fecha], "yyyy-MM-dd"), type text),
+				  #"Mes gráfico agregado" = Table.AddColumn(#"Fecha gráfico agregada", "mes_grafico", each Date.ToText([fecha], "yyyy-MM"), type text),
+				  #"Año agregado" = Table.AddColumn(#"Mes gráfico agregado", "año", each Date.Year([fecha]), Int64.Type)
 				in
-				  #"Tipo de columna cambiado"
+				  #"Año agregado"
 
 	annotation PBI_ResultType = Table
+

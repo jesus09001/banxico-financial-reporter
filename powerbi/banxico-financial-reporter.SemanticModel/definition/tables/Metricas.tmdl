@@ -1,0 +1,74 @@
+table Metricas
+	lineageTag: ecfe372e-c269-4b5a-b67f-a074b79c7586
+
+	measure MA30_Para_Grafico = MAX('Histórico'[ma_30d])
+		lineageTag: 0d4e5e88-3749-4642-a183-834c6d3e7f69
+
+	measure TC_Actual =
+			VAR UltimaFecha =
+			    MAXX(ALLSELECTED('Histórico'[fecha]), 'Histórico'[fecha])
+			RETURN
+			    CALCULATE(MAX('Histórico'[tipo_cambio]), 'Histórico'[fecha] = UltimaFecha)
+		formatString: "$"#,##0.0000
+		lineageTag: 19a2b3c4-d5e6-47f8-9012-3456789abcde
+
+	measure Var_Diaria_Actual =
+			VAR UltimaFecha =
+			    MAXX(ALLSELECTED('Histórico'[fecha]), 'Histórico'[fecha])
+			RETURN
+			    CALCULATE(MAX('Histórico'[variacion_diaria_pct]), 'Histórico'[fecha] = UltimaFecha)
+		formatString: 0.00%;-0.00%;-
+		lineageTag: 29a3b4c5-d6e7-48f9-0123-456789abcdef
+
+	measure TC_Minimo = MIN('Histórico'[tipo_cambio])
+		formatString: "$"#,##0.0000
+		lineageTag: 39b4c5d6-e7f8-4901-1234-56789abcdef0
+
+	measure TC_Maximo = MAX('Histórico'[tipo_cambio])
+		formatString: "$"#,##0.0000
+		lineageTag: 49c5d6e7-f801-4123-2345-6789abcdef01
+
+	measure TC_Promedio = AVERAGE('Histórico'[tipo_cambio])
+		formatString: "$"#,##0.0000
+		lineageTag: 59d6e7f8-0123-4234-3456-789abcdef012
+
+	measure Volatilidad_Actual =
+			VAR UltimaFecha =
+			    MAXX(ALLSELECTED('Histórico'[fecha]), 'Histórico'[fecha])
+			RETURN
+			    CALCULATE(MAX('Histórico'[volatilidad_30d]), 'Histórico'[fecha] = UltimaFecha)
+		formatString: 0.00%;-0.00%;-
+		lineageTag: 69e7f801-1234-4345-4567-89abcdef0123
+
+	measure TC_Para_Grafico =
+			VAR TipoCambioDia = SELECTEDVALUE('Histórico'[tipo_cambio])
+			RETURN COALESCE(TipoCambioDia, MAX('Histórico'[tipo_cambio]))
+		formatString: "$"#,##0.0000
+		lineageTag: 79f80123-2345-4456-5678-9abcdef01234
+
+	measure MA90_Para_Grafico = MAX('Histórico'[ma_90d])
+		formatString: "$"#,##0.0000
+		lineageTag: 89a01234-3456-4567-6789-abcdef012345
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Columna 1'
+		dataType: string
+		lineageTag: a3ad4059-6590-4ff1-b518-30dcc411976f
+		summarizeBy: none
+		sourceColumn: Columna 1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Metricas = m
+		mode: import
+		source =
+				let
+				  Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Columna 1" = _t])
+				in
+				  Origen
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

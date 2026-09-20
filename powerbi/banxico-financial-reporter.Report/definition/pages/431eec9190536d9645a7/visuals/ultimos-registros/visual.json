@@ -1,0 +1,241 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "ultimosRegistros",
+  "position": {
+    "x": 1277.6206309726404,
+    "y": 689.48082209713311,
+    "z": 2002,
+    "height": 325.73897106951171,
+    "width": 582.71082602434876,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Histórico"
+                    }
+                  },
+                  "Property": "fecha"
+                }
+              },
+              "queryRef": "Histórico.fecha",
+              "nativeQueryRef": "fecha"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Histórico"
+                    }
+                  },
+                  "Property": "tipo_cambio"
+                }
+              },
+              "queryRef": "Histórico.tipo_cambio",
+              "nativeQueryRef": "tipo_cambio"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Histórico"
+                    }
+                  },
+                  "Property": "variacion_diaria_pct"
+                }
+              },
+              "queryRef": "Histórico.variacion_diaria_pct",
+              "nativeQueryRef": "variacion_diaria_pct"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Histórico"
+                    }
+                  },
+                  "Property": "ma_30d"
+                }
+              },
+              "queryRef": "Histórico.ma_30d",
+              "nativeQueryRef": "ma_30d"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Histórico"
+                  }
+                },
+                "Property": "fecha"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D9E2F3'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Últimos registros del periodo'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "afa47a4ebca5a0e009d8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Histórico"
+              }
+            },
+            "Property": "fecha"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "62874b60601eb00d8c1d",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Histórico"
+              }
+            },
+            "Property": "tipo_cambio"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "3cdfa90f2953623ba060",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Histórico"
+              }
+            },
+            "Property": "variacion_diaria_pct"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "32a6e3d1a7578907070d",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Histórico"
+              }
+            },
+            "Property": "ma_30d"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}
