@@ -90,11 +90,11 @@ banxico-financial-reporter/
 ├── dashboard/
 │   └── Dashboard_Financiero.pbix    # Modelo y Dashboard interactivo en Power BI
 ├── src/
-│   ├── banxico_client.py            # Cliente HTTP para API SIE con reintentos y logging
-│   ├── data_processor.py            # Módulo de transformación y cálculo de métricas
-│   ├── excel_exporter.py            # Exportador formateado a Excel
-│   └── pdf_generator.py             # Generador y maquetador del PDF
-└── tests/                           # Reservado para pruebas unitarias (pytest)
+   ├── banxico_client.py            # Cliente HTTP para API SIE con reintentos y logging
+   ├── data_processor.py            # Módulo de transformación y cálculo de métricas
+   ├── excel_exporter.py            # Exportador formateado a Excel
+   └── pdf_generator.py             # Generador y maquetador del PDF
+
 ```
 
 ---
